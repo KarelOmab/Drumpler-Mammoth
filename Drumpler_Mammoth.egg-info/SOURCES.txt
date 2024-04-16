@@ -1,0 +1,12 @@
+LICENSE
+README.md
+setup.py
+Drumpler_Mammoth.egg-info/PKG-INFO
+Drumpler_Mammoth.egg-info/SOURCES.txt
+Drumpler_Mammoth.egg-info/dependency_links.txt
+Drumpler_Mammoth.egg-info/requires.txt
+Drumpler_Mammoth.egg-info/top_level.txt
+drumpler-mammoth/__init__.py
+drumpler-mammoth/config.py
+drumpler-mammoth/http_request.py
+drumpler-mammoth/mammoth.py
