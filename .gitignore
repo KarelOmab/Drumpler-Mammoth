@@ -1,0 +1,16 @@
+.env
+.coverage
+.DS_Store
+/__pycache__
+/venv
+requests.db
+instance/requests.db-shm
+instance/requests.db-wal
+/noggin/__pycache__
+/dist
+/dist
+/dist
+drumpler.egg-info/PKG-INFO
+drumpler.egg-info/PKG-INFO
+drumpler.egg-info/PKG-INFO
+/karel
