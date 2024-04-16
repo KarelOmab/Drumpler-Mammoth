@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='drumpler_mammoth',
-    version='2.0.9',
+    version='2.1.0',
     author='Karel Tutsu',
     author_email='karel.tutsu@gmail.com',
     description='Framework for rapidly developing a restful API that requires post processing',
