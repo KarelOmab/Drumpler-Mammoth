@@ -5,6 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 import multiprocessing
 from .http_request import HttpRequest  # Make sure to import your HttpRequest class
 from .config import Config
+import traceback
 
 class Mammoth:
     def __init__(self, process_request_data, drumpler_url=Config.DRUMPLER_URL, workers=1, custom_value=None):
@@ -22,6 +23,11 @@ class Mammoth:
 
         if response.status_code == 200:
             data = response.json()
+            # Ensure request_raw is parsed from JSON only if it's a string
+            request_raw = data['request_raw']
+            if isinstance(request_raw, str):
+                request_raw = json.loads(request_raw)
+
             return HttpRequest(
                 id=data['request_id'],
                 job_id=data['job_id'],
@@ -29,13 +35,13 @@ class Mammoth:
                 user_agent=data['user_agent'],
                 method=data['method'],
                 request_url=data['request_url'],
-                request_raw=json.loads(data['request_raw']),
+                request_raw=request_raw,
                 custom_value=data['custom_value']
             )
         else:
             print(f"Failed to fetch next pending job: {response.status_code}")
             return None
-
+        
     def insert_event(self, job_id, message):
         headers = {"Authorization": f"Bearer {self.auth_key}"}
         event_data = {
@@ -50,7 +56,12 @@ class Mammoth:
 
     def run(self):
         with ThreadPoolExecutor(max_workers=self.workers) as executor:
-            executor.submit(self.worker_task)
+            future = executor.submit(self.worker_task)
+            try:
+                future.result()  # This will wait until the callable completes
+            except Exception as e:
+                traceback.print_exc()
+                print(f"Worker task raised an exception: {e}")
 
     def worker_task(self):
         while not self.stop_signal.is_set():
@@ -58,14 +69,10 @@ class Mammoth:
             if request:
                 print(f"Fetched next pending job {request.job_id}")
                 if self.user_process_request_data(request):
-                    result = request.mark_as_handled()
-                    print(result)
-                    self.insert_event(request.id, "Request processed successfully")
+                    self.insert_event(request.job_id, "Request processed successfully")
                 else:
-                    self.insert_event(request.id, "Failed to process request")
+                    self.insert_event(request.job_id, "Failed to process request")
 
-        # Clean up or finish tasks
-        print("Worker task ended.")
 
     def stop(self):
         self.stop_signal.set()

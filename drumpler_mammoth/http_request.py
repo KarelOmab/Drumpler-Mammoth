@@ -3,9 +3,9 @@ import json
 from .config import Config
 
 class HttpRequest:
-    def __init__(self, id, timestamp, source_ip, user_agent, method, request_url, request_raw, custom_value, is_handled):
+    def __init__(self, id, job_id, source_ip, user_agent, method, request_url, request_raw, custom_value):
         self._id = id
-        self._timestamp = timestamp
+        self._job_id = job_id
         self._source_ip = source_ip
         self._user_agent = user_agent
         self._method = method
@@ -13,7 +13,6 @@ class HttpRequest:
         self._request_raw = request_raw
         self._request_json = json.loads(request_raw)
         self.custom_value = custom_value
-        self._is_handled = is_handled
 
     def mark_as_handled(self):
         headers = {
@@ -47,12 +46,12 @@ class HttpRequest:
         self._id = value
 
     @property
-    def timestamp(self):
-        return self._timestamp
+    def job_id(self):
+        return self._job_id
 
-    @timestamp.setter
-    def timestamp(self, value):
-        self._timestamp = value
+    @id.setter
+    def job_id(self, value):
+        self._job_id = value
 
     @property
     def source_ip(self):
@@ -101,11 +100,3 @@ class HttpRequest:
     @request_json.setter
     def request_json(self, value):
         self._request_json = value
-
-    @property
-    def is_handled(self):
-        return self._is_handled
-
-    @is_handled.setter
-    def is_handled(self, value):
-        self._is_handled = value
