@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
-Name: Drumpler-Mammoth
-Version: 2.0.1
+Name: drumpler_mammoth
+Version: 2.0.9
 Summary: Framework for rapidly developing a restful API that requires post processing
 Home-page: https://github.com/KarelOmab/Drumpler-Mammoth
 Author: Karel Tutsu
@@ -12,6 +12,7 @@ Requires-Python: >=3.6
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: requests
+Requires-Dist: python-dotenv
 
 
 # `Drumpler`

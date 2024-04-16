@@ -1,7 +1,0 @@
-Flask
-python-dotenv
-SQLAlchemy
-Flask_SQLAlchemy
-requests
-schedule
-psycopg2-binary

@@ -15,26 +15,25 @@ class Mammoth:
         self.user_process_request_data = process_request_data
         self.custom_value = custom_value
 
-    def fetch_next_unhandled_request(self):
+    def fetch_next_pending_job(self):
         headers = {"Authorization": f"Bearer {self.auth_key}"}
         params = {'custom_value': self.custom_value} if self.custom_value else {}
-        response = requests.get(f"{self.drumpler_url}/request/next-unhandled", headers=headers, params=params)
+        response = requests.get(f"{self.drumpler_url}/jobs/next-pending", headers=headers, params=params)
 
         if response.status_code == 200:
             data = response.json()
             return HttpRequest(
-                id=data['id'],
-                timestamp=data['timestamp'],
+                id=data['request_id'],
+                job_id=data['job_id'],
                 source_ip=data['source_ip'],
                 user_agent=data['user_agent'],
                 method=data['method'],
                 request_url=data['request_url'],
-                request_raw=json.dumps(data['request_raw']),
-                custom_value=data['custom_value'],
-                is_handled=data['is_handled']
+                request_raw=json.loads(data['request_raw']),
+                custom_value=data['custom_value']
             )
         else:
-            print(f"Failed to fetch unhandled request: {response.status_code}")
+            print(f"Failed to fetch next pending job: {response.status_code}")
             return None
 
     def insert_event(self, job_id, message):
@@ -55,9 +54,9 @@ class Mammoth:
 
     def worker_task(self):
         while not self.stop_signal.is_set():
-            request = self.fetch_next_unhandled_request()
+            request = self.fetch_next_pending_job()
             if request:
-                print(f"Processing request {request.id}")
+                print(f"Fetched next pending job {request.job_id}")
                 if self.user_process_request_data(request):
                     result = request.mark_as_handled()
                     print(result)

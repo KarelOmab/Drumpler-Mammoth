@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='Drumpler-Mammoth',
-    version='2.0.1',
+    name='drumpler_mammoth',
+    version='2.0.9',
     author='Karel Tutsu',
     author_email='karel.tutsu@gmail.com',
     description='Framework for rapidly developing a restful API that requires post processing',
@@ -18,5 +18,6 @@ setup(
     python_requires='>=3.6',
     install_requires=[
         'requests',
+        'python-dotenv',
     ],
 )

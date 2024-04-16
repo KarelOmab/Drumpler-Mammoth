@@ -1,6 +1,6 @@
 import requests
 import json
-from .constants import DRUMPLER_URL, AUTHORIZATION_KEY
+from .config import Config
 
 class HttpRequest:
     def __init__(self, id, timestamp, source_ip, user_agent, method, request_url, request_raw, custom_value, is_handled):
@@ -17,7 +17,7 @@ class HttpRequest:
 
     def mark_as_handled(self):
         headers = {
-            'Authorization': f'Bearer {AUTHORIZATION_KEY}',
+            'Authorization': f'Bearer {Config.AUTHORIZATION_KEY}',
             'Content-Type': 'application/json'  # Indicate JSON payload
         }
         payload = {
@@ -25,7 +25,7 @@ class HttpRequest:
         }
 
         try:
-            response = requests.put(f"{DRUMPLER_URL}/request/{self.id}", json=payload, headers=headers)
+            response = requests.put(f"{Config.DRUMPLER_URL}/request/{self.id}", json=payload, headers=headers)
             if response.status_code == 200:
                 return f"Request {self.id} marked as handled successfully."
             else:
