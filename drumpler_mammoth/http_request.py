@@ -4,15 +4,21 @@ from .config import Config
 
 class HttpRequest:
     def __init__(self, id, job_id, source_ip, user_agent, method, request_url, request_raw, custom_value):
-        self._id = id
-        self._job_id = job_id
-        self._source_ip = source_ip
-        self._user_agent = user_agent
-        self._method = method
-        self._request_url = request_url
-        self._request_raw = request_raw
-        self._request_json = json.loads(request_raw)
+        self.id = id
+        self.job_id = job_id
+        self.source_ip = source_ip
+        self.user_agent = user_agent
+        self.method = method
+        self.request_url = request_url
         self.custom_value = custom_value
+
+        # Ensure request_raw is correctly handled
+        if isinstance(request_raw, str):
+            self.request_json = json.loads(request_raw)
+        elif isinstance(request_raw, dict):
+            self.request_json = request_raw
+        else:
+            raise ValueError("request_raw must be either a JSON string or a dictionary")
 
     def mark_as_handled(self):
         headers = {

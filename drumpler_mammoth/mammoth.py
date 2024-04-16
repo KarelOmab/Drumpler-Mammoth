@@ -54,6 +54,33 @@ class Mammoth:
         else:
             print(f"Failed to log event for job {job_id}: {response.status_code}")
 
+    def update_status(self, job_id, new_status):
+        """
+        Update the status of a job in Drumpler.
+        """
+        headers = {"Authorization": f"Bearer {self.auth_key}"}
+        data = {
+            "status": new_status
+        }
+        response = requests.put(f"{self.drumpler_url}/jobs/{job_id}/update-status", json=data, headers=headers)
+        if response.status_code == 200:
+            print(f"Status updated to {new_status} for job {job_id}")
+            if new_status == "Completed":
+                self.mark_request_as_handled(job_id)
+        else:
+            print(f"Failed to update status for job {job_id}: {response.status_code}")
+
+    def mark_request_as_handled(self, job_id):
+        """
+        Mark the request as handled when the job is completed.
+        """
+        headers = {"Authorization": f"Bearer {self.auth_key}"}
+        response = requests.put(f"{self.drumpler_url}/jobs/{job_id}/mark-handled", headers=headers)
+        if response.status_code == 200:
+            print(f"Request marked as handled for job {job_id}")
+        else:
+            print(f"Failed to mark request as handled for job {job_id}: {response.status_code}")
+
     def run(self):
         with ThreadPoolExecutor(max_workers=self.workers) as executor:
             future = executor.submit(self.worker_task)
@@ -68,11 +95,14 @@ class Mammoth:
             request = self.fetch_next_pending_job()
             if request:
                 print(f"Fetched next pending job {request.job_id}")
+                print(f"Updating status to 'In Progress'")
+                self.update_status(request.job_id, "In Progress")
                 if self.user_process_request_data(request):
                     self.insert_event(request.job_id, "Request processed successfully")
+                    self.update_status(request.job_id, "Completed")
                 else:
                     self.insert_event(request.job_id, "Failed to process request")
-
+                    self.update_status(request.job_id, "Error")
 
     def stop(self):
         self.stop_signal.set()
