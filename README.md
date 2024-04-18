@@ -1,6 +1,6 @@
 # Drumpler-Mammoth
 
-Drumpler-Mammoth is a robust job processing component of the Drumpler framework, designed to handle the asynchronous processing of tasks that are queued by the Drumpler API. It is engineered to automate and simplify the processing of queued jobs, allowing developers to solely focus on implementing custom logic to handle pending jobs as desired.
+Drumpler-Mammoth is a robust job processing component of the [Drumpler framework](https://github.com/KarelOmab/Drumpler), designed to handle the asynchronous processing of tasks that are queued by the Drumpler API. It is engineered to automate and simplify the processing of queued jobs, allowing developers to solely focus on implementing custom logic to handle pending jobs as desired.
 
 ## Overview
 
