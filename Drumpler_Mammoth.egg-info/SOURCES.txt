@@ -2,7 +2,6 @@ LICENSE
 README.md
 setup.py
 drumpler_mammoth/__init__.py
-drumpler_mammoth/config.py
 drumpler_mammoth/http_request.py
 drumpler_mammoth/mammoth.py
 drumpler_mammoth/mylogger.py
