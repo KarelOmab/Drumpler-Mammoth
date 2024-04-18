@@ -4,16 +4,14 @@ import signal
 import threading
 import multiprocessing
 from .http_request import HttpRequest  # Make sure to import your HttpRequest class
-from .config import Config
 from .mylogger import MyLogger
 
-
 class Mammoth:
-    def __init__(self, process_request_data, drumpler_url=Config.DRUMPLER_URL, num_workers=1, custom_value=None):
+    def __init__(self, drumpler_url, authorization_key, custom_value, process_request_data, num_workers=None):
         self.drumpler_url = drumpler_url
-        self.user_process_request_data = process_request_data
-        self.auth_key = Config.AUTHORIZATION_KEY  # Default value if not set
+        self.auth_key = authorization_key
         self.custom_value = custom_value
+        self.user_process_request_data = process_request_data
         
         # Initialize custom logger
         self.logger = MyLogger.get_logger()
