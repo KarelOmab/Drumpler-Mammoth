@@ -1,6 +1,4 @@
-import requests
 import json
-from .config import Config
 
 class HttpRequest:
     def __init__(self, id, job_id, source_ip, user_agent, method, request_url, request_raw, custom_value):
@@ -19,29 +17,6 @@ class HttpRequest:
             self.request_json = request_raw
         else:
             raise ValueError("request_raw must be either a JSON string or a dictionary")
-
-    def mark_as_handled(self):
-        headers = {
-            'Authorization': f'Bearer {Config.AUTHORIZATION_KEY}',
-            'Content-Type': 'application/json'  # Indicate JSON payload
-        }
-        payload = {
-            'is_handled': 1  # Assuming setting `is_handled` to 1 marks it as handled
-        }
-
-        try:
-            response = requests.put(f"{Config.DRUMPLER_URL}/request/{self.id}", json=payload, headers=headers)
-            if response.status_code == 200:
-                return f"Request {self.id} marked as handled successfully."
-            else:
-                # Attempt to extract and print a more descriptive error message
-                try:
-                    error_message = response.json().get('message', 'No error message provided.')
-                except ValueError:  # If response is not in JSON format
-                    error_message = response.text
-                return f"Failed to mark request {self.id} as handled: {response.status_code}, Error: {error_message}"
-        except requests.exceptions.RequestException as e:
-            return f"Error marking request {self.id} as handled: {e}"
 
     @property
     def id(self):
