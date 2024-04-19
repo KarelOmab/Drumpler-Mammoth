@@ -5,7 +5,7 @@ class MyLogger:
     _logger = None
 
     @classmethod
-    def get_logger(cls, name='MammothLogger', file_name='mammoth.log', level=logging.DEBUG):
+    def get_logger(cls, name='MammothLogger', file_name='mammoth.log', level=logging.ERROR):
         if cls._logger is None:
             # Create logger
             cls._logger = logging.getLogger(name)
