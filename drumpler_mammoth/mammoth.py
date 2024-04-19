@@ -68,7 +68,7 @@ class Mammoth:
             "job_id": job_id,
             "message": message
         }
-        response = requests.post(f"{self.drumpler_url}/events", json=event_data, headers=headers)
+        response = requests.post(f"{self.drumpler_url}/jobs/{job_id}/insert-event", json=event_data, headers=headers)
         if response.status_code != 200:
             print(f"Failed to log event for job {job_id}: {response.status_code}")
 
