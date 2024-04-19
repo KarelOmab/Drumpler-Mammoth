@@ -69,9 +69,7 @@ class Mammoth:
             "message": message
         }
         response = requests.post(f"{self.drumpler_url}/events", json=event_data, headers=headers)
-        if response.status_code == 201:
-            print(f"Event logged successfully for job {job_id}")
-        else:
+        if response.status_code != 200:
             print(f"Failed to log event for job {job_id}: {response.status_code}")
 
     def mark_request_as_handled(self, job_id):
@@ -80,9 +78,7 @@ class Mammoth:
         """
         headers = {"Authorization": f"Bearer {self.auth_key}"}
         response = requests.put(f"{self.drumpler_url}/jobs/{job_id}/mark-handled", headers=headers)
-        if response.status_code == 200:
-            print(f"Request marked as handled for job {job_id}")
-        else:
+        if response.status_code != 200:
             print(f"Failed to mark request as handled for job {job_id}: {response.status_code}")
         
     def update_status(self, job_id, new_status):
@@ -103,7 +99,7 @@ class Mammoth:
         while not self.stop_signal.is_set():
             request = self.fetch_next_pending_job()
             if request:
-                if self.user_process_request_data(request):
+                if self.user_process_request_data(self, request.job_id, request.request_dict):
                     self.insert_event(request.job_id, "Request processed successfully")
                     self.update_status(request.job_id, "Completed")
                     self.logger.info(f"Request processed successfully for job {request.job_id}")
