@@ -12,9 +12,9 @@ class HttpRequest:
 
         # Ensure request_raw is correctly handled
         if isinstance(request_raw, str):
-            self.request_json = json.loads(request_raw)
+            self.request_dict = json.loads(request_raw)
         elif isinstance(request_raw, dict):
-            self.request_json = request_raw
+            self.request_dict = request_raw
         else:
             raise ValueError("request_raw must be either a JSON string or a dictionary")
 
