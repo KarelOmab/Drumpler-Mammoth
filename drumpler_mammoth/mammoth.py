@@ -49,8 +49,12 @@ class Mammoth:
                     request_raw=json.loads(data['request_raw']),
                     custom_value=data['custom_value']
                 )
+            elif response.status_code == 404:
+                self.logger.info("No pending jobs found.")
+                return None
             else:
-                self.logger.error(f"Failed to fetch next pending job: {response.status_code} - {response.text}")
+                print(response.status_code, response.text)
+                self.logger.error(f"Error occured: {response.status_code} - {response.text}")
                 return None
         except requests.ConnectionError as e:
             self.logger.error(f"Network problem occurred: {str(e)}")
